@@ -15,14 +15,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int id;
-    private String username;
-    private String password;
-    private String salt;
-    private String email;
-    private int type;
-    private int status;
-    private String activation_code;
-    private String header_url;
-    private Date create_time;
+    private int id;//用户id
+    private String username;//用户名
+    private String password;//密码
+    private String salt;//加密盐
+    private String email;//邮箱
+    private int type;//0-普通用户; 1-超级管理员; 2-版主;
+    private int status;//0-未激活; 1-已激活;
+    private String activation_code;//激活码
+    private String header_url;//头像url
+    private Date create_time;//用户创建时间
 }

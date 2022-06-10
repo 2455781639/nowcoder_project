@@ -7,6 +7,11 @@ import top.chriszwz.community.entity.DiscussPost;
 
 import java.util.List;
 
+/* 
+ * @Description: DiscussPost select
+ * @Author: Chris(张文卓)
+ * @Date: 2022/6/24 9:21
+ */
 @Mapper
 public interface DiscussPostMapper {
 

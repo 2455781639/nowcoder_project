@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.chriszwz.community.dao.LoginTicketMapper">
+    <update id="updateStatus">
+        update login_ticket
+        set status = #{status}
+        where ticket = #{ticket}
+        <if test="ticket!=null">
+            and 1=1
+        </if>
+    </update>
+
+    <insert id="insertLoginTicket" parameterType="LoginTicket">
+        insert into login_ticket(ticket, user_id, status, expired)
+        values(#{ticket}, #{user_id}, #{status}, #{expired})
+    </insert>
+
+    <select id="selectByTicket" parameterType="string" resultType="LoginTicket">
+        select id, ticket, user_id, status, expired
+        from login_ticket
+        where ticket = #{ticket}
+    </select>
+</mapper>

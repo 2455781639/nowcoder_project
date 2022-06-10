@@ -10,12 +10,16 @@ import top.chriszwz.community.entity.Page;
 import top.chriszwz.community.entity.User;
 import top.chriszwz.community.service.DiscussPostService;
 import top.chriszwz.community.service.UserService;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/* 
+ * @Description: 首页
+ * @Author: Chris(张文卓)
+ * @Date: 2022/6/24 9:22
+ */
 @Controller
 public class HomeController {
     @Autowired
