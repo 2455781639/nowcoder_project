@@ -9,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+/*
+ * @Description: 验证码配置类
+ * @Author: Chris(张文卓)
+ * @Date: 2022/6/25 8:35
+ */
 @Configuration
 public class KaptchaConfig {
 

@@ -12,7 +12,7 @@ import java.util.Date;
 public class LoginTicket {
     private int id;
     private int user_id;
-    private String ticket;
-    private int status;
-    private Date expired;
+    private String ticket;//登陆凭证
+    private int status;//0-登录，1-退出
+    private Date expired;//过期时间
 }

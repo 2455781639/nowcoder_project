@@ -5,11 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import top.chriszwz.community.entity.DiscussPost;
 import top.chriszwz.community.entity.Page;
 import top.chriszwz.community.entity.User;
 import top.chriszwz.community.service.DiscussPostService;
 import top.chriszwz.community.service.UserService;
+import top.chriszwz.community.util.CommunityUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,5 +50,15 @@ public class HomeController {
         model.addAttribute("discussPosts",discussPosts);
         return "/index";
     }
+
+    //ajax示例
+    @RequestMapping(path = "/ajax",method = RequestMethod.POST)
+    @ResponseBody
+    public String testAjax(String name,int age) {
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJSONString(0,"success");
+    }
+
 
 }

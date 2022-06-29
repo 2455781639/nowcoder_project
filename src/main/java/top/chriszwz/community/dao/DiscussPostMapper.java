@@ -18,4 +18,10 @@ public interface DiscussPostMapper {
     List<DiscussPost> selectDiscussPosts(int user_id,int offset, int limit);
 
     int selectDiscussPostRows(@Param("user_id") int user_id);
+
+    //新增帖子
+    int insertDiscussPost(DiscussPost discussPost);
+
+    //查询帖子详情
+    DiscussPost selectDiscussPostById(int id);
 }

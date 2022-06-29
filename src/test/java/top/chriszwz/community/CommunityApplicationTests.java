@@ -8,6 +8,7 @@ import top.chriszwz.community.dao.UserMapper;
 import top.chriszwz.community.entity.DiscussPost;
 import top.chriszwz.community.entity.User;
 import top.chriszwz.community.util.MailClient;
+import top.chriszwz.community.util.SensitiveFilter;
 
 import java.util.List;
 
@@ -20,10 +21,15 @@ class CommunityApplicationTests {
     @Autowired
     private DiscussPostMapper discussPostMapper;
 
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
+
     @Test
     void contextLoads() {
-        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(101, 0, 10);
-        list.forEach(System.out::println);
+        String text = "我要嫖⭐⭐⭐娼，我要赌⭐⭐⭐⭐⭐⭐博，我是吴衍涛。";
+        //过滤敏感词
+        text = sensitiveFilter.filter(text);
+        System.out.println(text);
     }
 
     @Autowired

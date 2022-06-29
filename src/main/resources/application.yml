@@ -39,6 +39,7 @@ spring:
 community:
   path:
     domain: http://localhost:8081
+    upload: C:/Users/Shine'lon/Desktop/upload
 
 # mybatis配置
 mybatis:
