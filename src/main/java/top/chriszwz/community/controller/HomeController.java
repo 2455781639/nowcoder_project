@@ -33,6 +33,8 @@ public class HomeController {
 
     @RequestMapping(path = "/index",method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
+        // 方法调用栈， SpringMVC会自动实例化Model和Page，并将Page注入到Model
+        // 故可以在thymeleaf中可以直接访问page中的数据.
         page.setRows(discussPostService.findDiscussPostRows(0));
         page.setPath("/index");
 
@@ -51,13 +53,9 @@ public class HomeController {
         return "/index";
     }
 
-    //ajax示例
-    @RequestMapping(path = "/ajax",method = RequestMethod.POST)
-    @ResponseBody
-    public String testAjax(String name,int age) {
-        System.out.println(name);
-        System.out.println(age);
-        return CommunityUtil.getJSONString(0,"success");
+    @RequestMapping(path = "/error",method = RequestMethod.GET)
+    public String getErrorPage() {
+        return "/error/500";
     }
 
 

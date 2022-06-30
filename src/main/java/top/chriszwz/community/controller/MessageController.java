@@ -47,7 +47,7 @@ public class MessageController {
                 Map<String, Object> map = new HashMap<>();
                 map.put("conversation", message);
                 map.put("letterCount", messageService.findLetterCount(message.getConversation_id()));
-                map.put("UnreadCount", messageService.findLetterUnreadCount(user.getId(), String.valueOf(message.getConversation_id())));
+                map.put("UnreadCount", messageService.findLetterUnreadCount(user.getId(), message.getConversation_id()));
                 int target_id = message.getFrom_id() == user.getId() ? message.getTo_id() : message.getFrom_id();
                 map.put("target", userService.findById(target_id));
                 conversationsList.add(map);
@@ -84,6 +84,12 @@ public class MessageController {
         //查询私信目标
         model.addAttribute("target", getLetterTarget(conversation_id));
 
+        //设置已读
+        List<Integer> list = getLetterIds(letterList);
+        if(!list.isEmpty()){
+            messageService.readMessage(list);
+        }
+
         return "/site/letter-detail";
     }
 
@@ -99,6 +105,18 @@ public class MessageController {
         } else {
             return null;
         }
+    }
+
+    private List<Integer> getLetterIds(List<Message> letterList){
+        List<Integer> list = new ArrayList<>();
+        if(letterList != null){
+            for(Message message: letterList){
+                if(hostHolder.getUser().getId() == message.getTo_id() && message.getStatus() == 0){
+                    list.add(message.getId());
+                }
+            }
+        }
+        return list;
     }
 
     @RequestMapping(path = "/letter/send", method = RequestMethod.POST)
