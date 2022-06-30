@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /*
- * @Description: 评论
+ * @Description: 私信实体类
  * @Author: Chris(张文卓)
- * @Date: 2022/6/29 15:20
+ * @Date: 2022/6/30 7:54
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+public class Message {
+
     private int id;
-    private int user_id;
-    private int entity_type;//1-帖子评论 2-回复评论
-    private int entity_id;
-    private int target_id;
+    private int from_id;
+    private int to_id;
+    private String conversation_id;
     private String content;
     private int status;
     private Date create_time;
