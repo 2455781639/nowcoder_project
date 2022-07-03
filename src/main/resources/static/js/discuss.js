@@ -1,8 +1,7 @@
-function like(btn, entityType, entityId){
-
+function like(btn, entityType, entityId, entityUserId) {
     $.post(
         "/like",
-        {"entityType":entityType,"entityId":entityId},
+        {"entityType":entityType,"entityId":entityId,"entityUserId":entityUserId},
         function (data){
             data = $.parseJSON(data);
             // 在提示框中显示提示信息

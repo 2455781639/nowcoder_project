@@ -30,6 +30,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/static/**");//不需要拦截的路径
 
         registry.addInterceptor(loginRequiredInterceptor)
+                .addPathPatterns("/discuss/detail/**")//需要拦截的路径
                 .excludePathPatterns("/static/**");//不需要拦截的路径
+
     }
 }
