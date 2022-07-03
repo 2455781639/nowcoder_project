@@ -7,6 +7,7 @@ import top.chriszwz.community.dao.DiscussPostMapper;
 import top.chriszwz.community.dao.UserMapper;
 import top.chriszwz.community.entity.DiscussPost;
 import top.chriszwz.community.entity.User;
+import top.chriszwz.community.util.CommunityUtil;
 import top.chriszwz.community.util.MailClient;
 import top.chriszwz.community.util.SensitiveFilter;
 
@@ -26,10 +27,7 @@ class CommunityApplicationTests {
 
     @Test
     void contextLoads() {
-        String text = "我要嫖⭐⭐⭐娼，我要赌⭐⭐⭐⭐⭐⭐博，我是吴衍涛。";
-        //过滤敏感词
-        text = sensitiveFilter.filter(text);
-        System.out.println(text);
+        System.out.println(CommunityUtil.md5("居然给你解开了！你真是个小可爱！"));
     }
 
     @Autowired

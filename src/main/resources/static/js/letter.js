@@ -10,7 +10,7 @@ function send_letter() {
 	var content = $("#message-text").val();
 
 	$.post(
-		"http://localhost:8081" + "/letter/send",
+		"/letter/send",
 		{"toName":toName,"content":content},
 		function (data){
 			data = $.parseJSON(data);

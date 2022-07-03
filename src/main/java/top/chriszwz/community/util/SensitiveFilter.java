@@ -69,10 +69,9 @@ public class SensitiveFilter {
 
     //过滤敏感词后的文本
     public String filter(String text){
-        if(StringUtils.isBlank(text)){
+        if(StringUtils.isBlank(text)){//判断文本是否为空
             return null;
         }
-
         //指针1
         TrieNode node = rootNode;
         //指针2

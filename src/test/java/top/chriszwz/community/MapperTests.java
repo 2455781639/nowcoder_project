@@ -30,8 +30,10 @@ public class MapperTests {
     private MessageMapper messageMapper;
     @Test
     void contextLoads() {
-        List<Message> messages = messageMapper.selectConversations(111, 0, 20);
-        messages.forEach(System.out::println);
+        String s = "你好，我是张文卓";
+        for(int i = 0; i < s.length(); i++) {
+            System.out.println(s.charAt(i));
+        }
     }
 
 }

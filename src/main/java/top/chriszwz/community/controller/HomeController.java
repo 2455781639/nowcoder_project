@@ -10,7 +10,9 @@ import top.chriszwz.community.entity.DiscussPost;
 import top.chriszwz.community.entity.Page;
 import top.chriszwz.community.entity.User;
 import top.chriszwz.community.service.DiscussPostService;
+import top.chriszwz.community.service.LikeService;
 import top.chriszwz.community.service.UserService;
+import top.chriszwz.community.util.CommunityConstant;
 import top.chriszwz.community.util.CommunityUtil;
 
 import java.util.ArrayList;
@@ -24,12 +26,17 @@ import java.util.Map;
  * @Date: 2022/6/24 9:22
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
+
+
 
     @RequestMapping(path = "/index",method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
@@ -46,6 +53,11 @@ public class HomeController {
                 map.put("discussPost", discussPost);
                 User user = userService.findById(discussPost.getUser_id());
                 map.put("user", user);
+
+                // 点赞数
+                long likeCount = likeService.getLikeCount(ENTITY_TYPE_POST, discussPost.getId());
+                map.put("likeCount", likeCount);
+
                 discussPosts.add(map);
             }
         }
