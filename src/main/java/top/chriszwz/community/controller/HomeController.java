@@ -11,9 +11,11 @@ import top.chriszwz.community.entity.Page;
 import top.chriszwz.community.entity.User;
 import top.chriszwz.community.service.DiscussPostService;
 import top.chriszwz.community.service.LikeService;
+import top.chriszwz.community.service.MessageService;
 import top.chriszwz.community.service.UserService;
 import top.chriszwz.community.util.CommunityConstant;
 import top.chriszwz.community.util.CommunityUtil;
+import top.chriszwz.community.util.HostHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,12 @@ public class HomeController implements CommunityConstant {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private HostHolder hostHolder;
+
+    @Autowired
+    private MessageService messageService;
 
 
 
@@ -62,6 +70,8 @@ public class HomeController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts",discussPosts);
+
+
         return "/index";
     }
 

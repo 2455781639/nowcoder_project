@@ -10,6 +10,7 @@ import top.chriszwz.community.entity.LoginTicket;
  * @Date: 2022/6/24 9:42
  */
 @Mapper
+@Deprecated//声明组件不推荐使用
 public interface LoginTicketMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertLoginTicket(LoginTicket loginTicket);

@@ -3,6 +3,7 @@ package top.chriszwz.community;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.KafkaTemplate;
 import top.chriszwz.community.dao.DiscussPostMapper;
 import top.chriszwz.community.dao.UserMapper;
 import top.chriszwz.community.entity.DiscussPost;
@@ -25,9 +26,12 @@ class CommunityApplicationTests {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
+
     @Test
     void contextLoads() {
-        System.out.println(CommunityUtil.md5("居然给你解开了！你真是个小可爱！"));
+
     }
 
     @Autowired

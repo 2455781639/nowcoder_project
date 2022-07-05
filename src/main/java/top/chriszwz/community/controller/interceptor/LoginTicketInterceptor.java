@@ -6,6 +6,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import top.chriszwz.community.entity.LoginTicket;
 import top.chriszwz.community.entity.User;
+import top.chriszwz.community.service.MessageService;
 import top.chriszwz.community.service.UserService;
 import top.chriszwz.community.util.CookieUtil;
 import top.chriszwz.community.util.HostHolder;
@@ -28,6 +29,9 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -53,6 +57,10 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         User user = hostHolder.getUser();
         if(user != null && modelAndView != null){
+            //查询未读消息数量
+            int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
+            int noticeUnreadCount = messageService.findNoticeUnreadCount(user.getId(), null);
+            modelAndView.addObject("UnreadCount", letterUnreadCount + noticeUnreadCount);
             modelAndView.addObject("loginUser",user);
         }
     }
