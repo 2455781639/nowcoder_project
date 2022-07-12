@@ -76,7 +76,7 @@ public class UserController implements CommunityConstant {
         File file = new File(uploadPath + "/" + fileName);
         //上传文件
         try {
-            headerImage.transferTo(file);
+            headerImage.transferTo(file);//将文件写入磁盘
         } catch (Exception e) {
             logger.error("上传文件失败!" + e.getMessage());
             throw new RuntimeException("上传文件失败!" + e.getMessage());//Controller会处理一切抛出的异常

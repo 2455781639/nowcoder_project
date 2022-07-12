@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import top.chriszwz.community.dao.elasticsearch.DiscussPostRepository;
 import top.chriszwz.community.entity.DiscussPost;
 import top.chriszwz.community.entity.Page;
 import top.chriszwz.community.entity.User;
@@ -44,14 +45,12 @@ public class HomeController implements CommunityConstant {
     @Autowired
     private MessageService messageService;
 
-
-
     @RequestMapping(path = "/index",method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
         // 方法调用栈， SpringMVC会自动实例化Model和Page，并将Page注入到Model
         // 故可以在thymeleaf中可以直接访问page中的数据.
-        page.setRows(discussPostService.findDiscussPostRows(0));
-        page.setPath("/index");
+        page.setRows(discussPostService.findDiscussPostRows(0));// 设置总记录数
+        page.setPath("/index");// 设置分页路径
 
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> discussPosts = new ArrayList<>();
@@ -70,8 +69,6 @@ public class HomeController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts",discussPosts);
-
-
         return "/index";
     }
 
@@ -80,5 +77,9 @@ public class HomeController implements CommunityConstant {
         return "/error/500";
     }
 
-
+    // 拒绝访问时的提示页面
+    @RequestMapping(path = "/denied", method = RequestMethod.GET)
+    public String getDeniedPage() {
+        return "/error/404";
+    }
 }

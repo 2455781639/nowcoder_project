@@ -1,5 +1,6 @@
 package top.chriszwz.community;
 
+import org.elasticsearch.transport.netty4.Netty4Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,7 @@ public class MapperTests {
         for(int i = 0; i < s.length(); i++) {
             System.out.println(s.charAt(i));
         }
+
     }
 
 }

@@ -29,7 +29,7 @@ public class ServiceLogAspect {
     public void before(JoinPoint joinPoint) {
         //用户[],在[...](date)，访问了[...].
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if(attributes == null){
+        if(attributes == null){//方便后期判空处理
             return;
         }
         HttpServletRequest request = attributes.getRequest();

@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.chriszwz.community.entity.Comment;
-import top.chriszwz.community.entity.DiscussPost;
-import top.chriszwz.community.entity.Page;
-import top.chriszwz.community.entity.User;
+import top.chriszwz.community.entity.*;
+import top.chriszwz.community.event.EventProducer;
 import top.chriszwz.community.service.CommentService;
 import top.chriszwz.community.service.DiscussPostService;
 import top.chriszwz.community.service.LikeService;
@@ -40,6 +38,9 @@ public class DiscussPostController implements CommunityConstant {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     //添加帖子
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
@@ -56,6 +57,14 @@ public class DiscussPostController implements CommunityConstant {
         discussPost.setContent(content);
         discussPost.setCreate_time(new Date());
         discussPostService.addDiscussPost(discussPost);
+
+        //触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(discussPost.getId());
+        eventProducer.fireEvent(event);
 
         //报错情况统一处理
         return CommunityUtil.getJSONString(0, "发布成功!");
@@ -134,7 +143,55 @@ public class DiscussPostController implements CommunityConstant {
         return "/site/discuss-detail";
     }
 
+    //置顶
+    @RequestMapping(path = "/top", method = RequestMethod.POST)
+    @ResponseBody
+    public String setTop(int discussPostId) {
+        discussPostService.updateType(discussPostId, 1);
 
+        //触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(discussPostId);
+        eventProducer.fireEvent(event);
 
+        return CommunityUtil.getJSONString(0);
+    }
+
+    //加精
+    @RequestMapping(path = "/wonderful", method = RequestMethod.POST)
+    @ResponseBody
+    public String setWonderful(int discussPostId) {
+        discussPostService.updateStatus(discussPostId, 1);
+
+        //触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(discussPostId);
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0);
+    }
+
+    //加精
+    @RequestMapping(path = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String setDelete(int discussPostId) {
+        discussPostService.updateStatus(discussPostId, 2);
+
+        //触发删帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_DELETE)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(discussPostId);
+        eventProducer.fireEvent(event);
+        System.out.println("删帖事件触发");
+        return CommunityUtil.getJSONString(0);
+    }
 
 }

@@ -8,7 +8,7 @@
         id, user_id, title,content, type, status, create_time, comment_count, score
     </sql>
 
-    <insert id="insertDiscussPost" parameterType="DiscussPost">
+    <insert id="insertDiscussPost" parameterType="DiscussPost" keyProperty="id">
         insert into discuss_post(user_id, title, content, type, status, create_time, comment_count, score)
         values(#{user_id}, #{title}, #{content}, #{type}, #{status}, #{create_time}, #{comment_count}, #{score})
     </insert>
@@ -16,6 +16,18 @@
     <update id="updateCommentCount">
         update discuss_post
         set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
+    <update id="updateType" parameterType="int">
+        update discuss_post
+        set type = #{type}
+        where id = #{id}
+    </update>
+
+    <update id="updateStatus" parameterType="int">
+        update discuss_post
+        set status = #{status}
         where id = #{id}
     </update>
 

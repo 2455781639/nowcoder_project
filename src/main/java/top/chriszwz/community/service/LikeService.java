@@ -31,7 +31,7 @@ public class LikeService {
                 String userLikeKey = RedisKeyUtil.getUserLikeKey(entityUserId);
 
                 boolean isMember = operations.opsForSet().isMember(entityLikeKey, userId);
-                operations.multi();
+                operations.multi();//开启事务
                 if (isMember) {
                     operations.opsForSet().remove(entityLikeKey, userId);
                     operations.opsForValue().decrement(userLikeKey);
@@ -39,7 +39,7 @@ public class LikeService {
                     operations.opsForSet().add(entityLikeKey, userId);
                     operations.opsForValue().increment(userLikeKey);
                 }
-                return operations.exec();
+                return operations.exec();//执行事务
             }
         });
     }

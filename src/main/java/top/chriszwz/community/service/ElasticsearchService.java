@@ -1,4 +1,4 @@
-package top.chriszwz.community;
+package top.chriszwz.community.service;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -8,9 +8,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,66 +18,44 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.kafka.core.KafkaTemplate;
-import top.chriszwz.community.dao.DiscussPostMapper;
-import top.chriszwz.community.dao.UserMapper;
+import org.springframework.stereotype.Service;
 import top.chriszwz.community.dao.elasticsearch.DiscussPostRepository;
 import top.chriszwz.community.entity.DiscussPost;
-import top.chriszwz.community.util.MailClient;
-import top.chriszwz.community.util.SensitiveFilter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
-class CommunityApplicationTests {
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private DiscussPostMapper discussPostMapper;
-
-    @Autowired
-    private SensitiveFilter sensitiveFilter;
-
-    @Autowired
-    private KafkaTemplate kafkaTemplate;
+@Service
+public class ElasticsearchService {
 
     @Autowired
     private DiscussPostRepository discussPostRepository;
 
     @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    private ElasticsearchTemplate elasticTemplate;
 
-    @Autowired
-    private MailClient mailClient;
-
-
-
-    @Test
-    void testSearch() {
-//        discussPostRepository.save(discussPostMapper.selectDiscussPostById(276));
-//        discussPostRepository.save(discussPostMapper.selectDiscussPostById(275));
-//        discussPostRepository.save(discussPostMapper.selectDiscussPostById(274));
-        discussPostRepository.saveAll(discussPostMapper.selectDiscussPosts(0, 0, 10));
+    public void saveDiscussPost(DiscussPost discussPost) {
+        discussPostRepository.save(discussPost);
     }
 
-    @Test
-    void testSearchByTemplate(){
+    public void deleteDiscussPost(int id) {
+        discussPostRepository.deleteById(id);
+    }
+
+    public Page<DiscussPost> searchDiscussPosts(String keyword, int current, int limit) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery("offer","title", "content"))
+                .withQuery(QueryBuilders.multiMatchQuery(keyword,"title", "content"))
+                .withSort(SortBuilders.fieldSort("create_time").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("type").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("score").order(SortOrder.DESC))
-                .withSort(SortBuilders.fieldSort("create_time").order(SortOrder.DESC))
-                .withPageable(PageRequest.of(0, 10))
+                .withPageable(PageRequest.of(current, limit))
                 .withHighlightFields(
                         new HighlightBuilder.Field("title").preTags("<em>").postTags("</em>"),
                         new HighlightBuilder.Field("content").preTags("<em>").postTags("</em>")
                 ).build();
 
-        Page<DiscussPost> page = elasticsearchTemplate.queryForPage(searchQuery, DiscussPost.class, new SearchResultMapper() {
+        return elasticTemplate.queryForPage(searchQuery, DiscussPost.class, new SearchResultMapper() {
             @Override
             public <T> AggregatedPage<T> mapResults(SearchResponse searchResponse, Class<T> aClass, Pageable pageable) {
                 SearchHits hits = searchResponse.getHits();
@@ -114,14 +90,12 @@ class CommunityApplicationTests {
 
                     HighlightField titleField = hit.getHighlightFields().get("title");
                     if(titleField != null){
-                        String titleHighlight = titleField.getFragments()[0].toString();
-                        post.setTitle(titleHighlight);
+                        post.setTitle(titleField.getFragments()[0].toString());
                     }
 
                     HighlightField contentField = hit.getHighlightFields().get("content");
                     if(contentField != null){
-                        String contentHighlight = contentField.getFragments()[0].toString();
-                        post.setTitle(contentHighlight);
+                        post.setContent(contentField.getFragments()[0].toString());
                     }
                     list.add(post);
 
@@ -130,20 +104,6 @@ class CommunityApplicationTests {
                         hits.getTotalHits(), searchResponse.getAggregations(), searchResponse.getScrollId(), hits.getMaxScore());
             }
         });
-        System.out.println(page.getTotalElements());
-        System.out.println(page.getTotalPages());
-        System.out.println(page.getNumber());
-        System.out.println(page.getSize());
-        for(DiscussPost post : page) {
-            System.out.println(post.toString());
-        }
-    }
-
-
-
-    @Test
-    public void mailTest(){
-        mailClient.sendMail("zwz2455781639@gmail.com","test","你好这里是Chris发送方测试邮件服务器");
     }
 
 }

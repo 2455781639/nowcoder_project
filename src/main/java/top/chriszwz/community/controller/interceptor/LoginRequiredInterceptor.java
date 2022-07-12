@@ -20,13 +20,13 @@ import java.lang.reflect.Method;
 public class LoginRequiredInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private HostHolder hostHolder;
+    private HostHolder hostHolder;//用户信息维护类
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(handler instanceof HandlerMethod){
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
+        if(handler instanceof HandlerMethod){//判断是否是HandlerMethod
+            HandlerMethod handlerMethod = (HandlerMethod) handler;//获取方法上的注解
+            Method method = handlerMethod.getMethod();//获取方法
             LoginRequired loginRequired = method.getAnnotation(LoginRequired.class);//筛选带注解的方法进行拦截
             if(loginRequired != null && hostHolder.getUser() == null){
                 //如果用户没有登录，并且请求的方法需要登录，则重定向到登录页面
