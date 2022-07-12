@@ -53,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                         AUTHORITY_MODERATOR//版主
                 )
                 .antMatchers(
-                        "/discuss/delete"//删除评论
+                        "/discuss/delete",//删除评论
+                        "/data/**"//数据统计
                 )
                 .hasAnyAuthority(
                         AUTHORITY_ADMIN

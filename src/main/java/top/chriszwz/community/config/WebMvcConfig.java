@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.chriszwz.community.controller.interceptor.AlphaInterceptor;
+import top.chriszwz.community.controller.interceptor.DateInterceptor;
 import top.chriszwz.community.controller.interceptor.LoginTicketInterceptor;
 
 @Configuration
@@ -19,6 +20,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    @Autowired
 //    private LoginRequiredInterceptor loginRequiredInterceptor;
 
+    @Autowired
+    private DateInterceptor dateInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(alphaInterceptor)
@@ -31,6 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(loginRequiredInterceptor)
 //                .addPathPatterns("/discuss/detail/**")//需要拦截的路径
 //                .excludePathPatterns("/static/**");//不需要拦截的路径
+        registry.addInterceptor(dateInterceptor)//日期拦截器
+                .excludePathPatterns("/static/**");//不需要拦截的路径
 
     }
 }
